@@ -1,4 +1,5 @@
 import cv2
+import numpy as np
 
 def Gray_Binary(file_path, shape, thresh):
     img_org = cv2.imread(file_path)
@@ -11,8 +12,13 @@ def Gray_Binary(file_path, shape, thresh):
 
 import matplotlib.pyplot as plt
 
-file_path_F = "../File_Lego-Road/Test-Image/Forward.jpeg"
-img_org_F, gray_img_F, binary_img_F = Gray_Binary(file_path_F, (100, 100), 200)
+file_path_F = "../Image-Processing/T.jpg"
+img_org_F, gray_img_F, binary_img_F = Gray_Binary(file_path_F, (100, 100), 160)
+
+i = np.array(gray_img_F).flatten() / 255
+Tensor = np.array(i).tolist()
+
+print(Tensor)
 
 file_path_L = "../File_Lego-Road/Test-Image/Left.jpeg"
 img_org_L, gray_img_L, binary_img_L = Gray_Binary(file_path_L, (100, 100), 200)

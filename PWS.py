@@ -25,8 +25,8 @@ Drone.takeoff()
 
 print(Drone.get_battery())
 
-Drone.send_rc_control(0, 0, -180, 0)
-time.sleep(0.5)
+Drone.send_rc_control(0, 0, -150, 0)
+time.sleep(0.6)
 Drone.send_rc_control(0, 0, 0, 0)
 
 Direction = ['Forward', 'Left', 'Right']
@@ -35,13 +35,14 @@ plt.ion()
 
 while True:
     image = frame_read.frame
-    cv2.imshow('', image)
+    img_reverse = np.array(image)
+    cv2.imshow('', img_reverse[::-1])
     key = cv2.waitKey(1) & 0xff
 
     if key == 27: # ESC
         break
 
-    img = Gray_Binary(image, (100, 100), 200)[1]
+    img = Gray_Binary(image, (100, 100), 150)[1]
 
     Tensor = np.array(img).tolist()
     result = MLP.predict([Tensor])

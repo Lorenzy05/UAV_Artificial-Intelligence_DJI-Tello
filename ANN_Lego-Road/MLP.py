@@ -70,28 +70,20 @@ Tensor, Label = np.array(Tensor), np.array(Label)
 
 MLP = models.Sequential()
 
-MLP.add(layers.Dense(32, activation='relu', input_shape=(100*100,)))
-MLP.add(layers.Dense(64, activation='relu'))
-MLP.add(layers.Dense(128, activation='relu'))
+MLP.add(layers.Dense(256, activation='relu', input_shape=(100*100,)))
+MLP.add(layers.Dense(512, activation='relu'))
+MLP.add(layers.Dense(1024, activation='relu'))
 MLP.add(layers.Dense(3, activation='softmax'))
 
-MLP.compile(optimizer = 'sgd',
+MLP.compile(optimizer = 'rmsprop',
             loss      = 'categorical_crossentropy',
             metrics   = ['accuracy'])
 
-Accuracy_Loss = MLP.fit(Tensor[0:400], Label[0:400],
-                        epochs=50, batch_size=10,
-                        validation_data=(Tensor[400:450], Label[400:450]))
+Accuracy_Loss = MLP.fit(Tensor[0:300], Label[0:300],
+                        epochs=50, batch_size=50,
+                        validation_data=(Tensor[300:400], Label[300:400]))
 
-import time
-print()
-print(len(Tensor))
-begin = time.time()
-T, L = Tensor[250:251], Label[250:251]
-MLP.evaluate(Tensor[450:], Label[450:])
-eind = time.time()
-print((eind - begin))
-print()
+print(MLP.evaluate(Tensor[400:], Label[400:]))
 
 Choice = input("Option : ")
 
@@ -109,7 +101,7 @@ A_L = Accuracy_Loss.history
 acc, val_acc = A_L['accuracy'], A_L['val_accuracy']
 loss, val_loss = A_L['loss'], A_L['val_loss']
 
-epoches = range(1, 21)
+epoches = range(1, 51)
 Acc_reg = np.poly1d(np.polyfit(epoches, acc, 3))
 Acc_val_reg = np.poly1d(np.polyfit(epoches, val_acc, 3))
 Loss_reg = np.poly1d(np.polyfit(epoches, loss, 3))

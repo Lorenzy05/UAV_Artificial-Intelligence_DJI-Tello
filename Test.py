@@ -4,6 +4,20 @@ import numpy as np
 import imageio
 
 
+def Edge_Detection(image, shape):
+    image = cv2.imread(image)
+    image_resize = cv2.resize(image, shape)
+    gray = cv2.cvtColor(image_resize, cv2.COLOR_BGR2GRAY)
+
+    sobelx = cv2.Sobel(gray, cv2.CV_64F, 1, 0, ksize=3)
+    sobely = cv2.Sobel(gray, cv2.CV_64F, 0, 1, ksize=3)
+
+    edge = np.sqrt(np.square(sobelx) + np.square(sobely))
+    edge = (edge / np.max(edge)) * 255
+    edge = edge.astype(np.uint8) / 255
+
+    return edge
+
 
 
 def Gray_Binary(file_path, shape, thresh):
@@ -14,12 +28,12 @@ def Gray_Binary(file_path, shape, thresh):
 
 plt.ion()  # 启用交互模式
 
-
+'''
 frames_Forward = []
 for f in range(1, 320):
     plt.clf()
     file = "File_Lego-Road/Forward/" + str(f) + ".jpg"
-    binary = Gray_Binary(file, (100, 100), 170)[1]
+    binary = Edge_Detection(file, (100, 100))
     array = np.array(binary)
     binary = array[::-1]
     plt.imshow(binary, cmap='gray')
@@ -32,14 +46,14 @@ for f in range(1, 320):
     frames_Forward.append(frame)
 plt.close()
 #imageio.mimsave('File_Lego-Road/Move_Forward.gif', frames_Forward, duration=1)
-
+'''
 
 frames_Right = []
 plt.figure()
 for r in range(1, 128):
     plt.clf()
     file = "File_Lego-Road/Right/" + str(r) + ".jpg"
-    binary = Gray_Binary(file, (100, 100), 170)[1]
+    binary = Edge_Detection(file, (100, 100))
     array = np.array(binary)
     binary = array[::-1]
     plt.imshow(binary, cmap='gray')
@@ -58,7 +72,7 @@ plt.figure()
 for l in range(1, 163):
     plt.clf()
     file = "File_Lego-Road/Left/" + str(l) + ".jpg"
-    binary = Gray_Binary(file, (100, 100), 170)[1]
+    binary = Edge_Detection(file, (100, 100))
     array = np.array(binary)
     binary = array[::-1]
     plt.imshow(binary, cmap='gray')
@@ -70,3 +84,5 @@ for l in range(1, 163):
     frame = np.array(fig.canvas.renderer.buffer_rgba())
     frames_Left.append(frame)
 #imageio.mimsave('File_Lego-Road/Turn_Left.gif', frames_Left, duration=1)
+
+

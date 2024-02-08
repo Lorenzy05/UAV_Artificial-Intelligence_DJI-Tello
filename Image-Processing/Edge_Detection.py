@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+import matplotlib.pyplot as plt
 
 
 def Edge_Detection(image, shape):
@@ -12,12 +13,17 @@ def Edge_Detection(image, shape):
 
     edge = np.sqrt(np.square(sobelx) + np.square(sobely))
     edge = (edge / np.max(edge)) * 255
-    edge = edge.astype(np.uint8)
+    edge = edge.astype(np.uint8) / 255
 
     return edge
 
 
-edges_L = Edge_Detection("D:\MS\Coderen.jpeg", (1000, 600))
+edges_L = Edge_Detection("../Image-Processing/T.jpg", (100, 100))
+
+plt.imshow(edges_L, cmap='gray')
+plt.show()
+
+
 
 
 cv2.imshow('', edges_L)

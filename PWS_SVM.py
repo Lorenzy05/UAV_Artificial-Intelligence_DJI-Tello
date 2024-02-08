@@ -6,11 +6,11 @@ from djitellopy import Tello
 import matplotlib.pyplot as plt
 
 
-loaded_svm_model = joblib.load('svm_model.pkl')
+loaded_svm_model = joblib.load('Machine-Learning/svm_model.pkl')
 
 def Gray_Binary(file_path, shape, thresh):
-    img_gray = cv2.imread(file_path, cv2.IMREAD_GRAYSCALE)
-    img_resize = cv2.resize(img_gray, shape, interpolation=cv2.INTER_AREA)
+    gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    img_resize = cv2.resize(gray_image, shape, interpolation=cv2.INTER_AREA)
     img_binary = cv2.threshold(img_resize, thresh, 255, cv2.THRESH_BINARY)[1]
     return img_resize, img_binary
 
@@ -36,20 +36,22 @@ plt.ion()
 
 while True:
     image = frame_read.frame
-    cv2.imshow('', image)
+    cv2.imshow('', np.array(image)[::-1])
     key = cv2.waitKey(1) & 0xff
 
     if key == 27: # ESC
         break
 
-    img = Gray_Binary(image, (100, 100), 200)[0]
+    img = Gray_Binary(image, (100, 100), 180)
+    img_Gray = img.flatten() / 255
 
-    predictions = loaded_svm_model.predict(img.reshape(1, -1))[0]
+    predictions = loaded_svm_model.predict(img_Gray.reshape(1, -1))[0]
 
     D = Direction[predictions]
+    print(D)
 
     plt.clf()
-    array = np.reshape(img, (100, 100))
+    array = np.reshape(img[1], (100, 100))
     img = array[::-1]
     plt.imshow(img, cmap='gray')
     plt.title(str(D))
